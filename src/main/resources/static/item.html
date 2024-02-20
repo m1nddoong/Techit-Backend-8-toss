@@ -17,7 +17,13 @@
         <img class="mb-3 img-fluid" id="item-image">
         <h1 class="mb-3">Name: <span id="item-name"></span></h1>
         <p class="mb-3">Price: <span id="item-price"></span></p>
+        <!-- 추가 과제: 인증 붙이기 -->
+        <div class="mb-3">
+          <label for="bearer-input">Bearer Token</label>
+          <input type="text" class="form-control" id="bearer-input" value="No Token">
+        </div>
 
+        <a href="/static/items.html">목록으로</a>
       </div>
     </div>
     <div class="col-lg-6 p-3">
@@ -35,7 +41,7 @@
 <script>
   const itemId = new URLSearchParams(location.search).get('id')
   // Client Key 들어가는 곳
-  const clientKey = 'test_ck_ma60RZblrqYn4NqRwpM6rwzYWBn1'
+  const clientKey = 'test_ck_5OWRapdA8dPNMqbYJ2mR8o1zEqZK'
 
   const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS)
   const paymentMethodsWidget = paymentWidget.renderPaymentMethods(
@@ -63,6 +69,7 @@
             method: 'post',
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + document.getElementById('bearer-input').value,
             },
             body: JSON.stringify({
               paymentKey: data.paymentKey,
