@@ -12,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class ItemService {
+public class ItemService { // itemRepository가 비어있을때 4개의 아이템을 만들어주는 코드
     private final ItemRepository itemRepository;
     public ItemService(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
