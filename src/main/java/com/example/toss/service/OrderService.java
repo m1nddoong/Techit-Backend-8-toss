@@ -1,6 +1,7 @@
 package com.example.toss.service;
 
 import com.example.toss.dto.ItemOrderDto;
+import com.example.toss.dto.PaymentCancelDto;
 import com.example.toss.dto.PaymentConfirmDto;
 import com.example.toss.entity.Item;
 import com.example.toss.entity.ItemOrder;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
@@ -80,4 +82,19 @@ public class OrderService {
     }
 
 
+    // cancelPayment
+    @Transactional // 예외가 발생해서 트랜잭션에 문제가 생기면 롤백이 되도록
+    public Object cancelPayment(
+            Long id,
+            PaymentCancelDto dto
+    ) {
+        // 1. 취소할 주문을 찾는다.
+        ItemOrder order = orderRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND));
+        // 2. 주문 정보를 갱신한다.
+        order.setStatus("CANCEL");
+        // 3. 취소후 결과를 응답한다.
+        return tossService.cancelPayment(order.getTossPaymentKey(), dto);
+    }
 }
